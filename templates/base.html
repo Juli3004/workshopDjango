@@ -1,0 +1,16 @@
+<!-- Incluye archivos estáticos -->
+{% load static %}
+
+<!-- Contenido principal de la página -->
+{% block content %}
+
+<!-- Incluye la plantilla hija nav.html -->
+{% include 'nav.html' %}
+
+<!-- Incluye la plantilla hija header.html -->
+{% include 'header.html' %}
+
+<!-- Incluye la plantilla hija footer.html -->
+{% include 'footer.html' %}
+
+{% endblock %}
