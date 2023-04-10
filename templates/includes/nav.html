@@ -37,7 +37,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">
+                    <a class="nav-link" href="{% url 'carrito'%}">
                         <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-shopping-cart" width="30" height="30" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                             <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                             <circle cx="6" cy="19" r="2"></circle>
@@ -66,8 +66,8 @@
                         <li><a class="dropdown-item" href="#">Todos los productos</a></li>
                     </ul>
                 </li>
-                <!-- <li class="nav-item">
-                    <a class="nav-link" href="#">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'logout'%}">
                         <span>
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-logout" width="30" height="30" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                 <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
@@ -93,7 +93,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">
+                    <a class="nav-link" href="{% url 'login'%}">
                         <span>
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-login" width="30" height="30" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                 <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
@@ -103,34 +103,7 @@
                         </span>
                         Ingresar
                     </a>
-                </li> -->
-                <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="">Inicio</a>
                 </li>
-                {% if user.id is not None %}
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Cambiar contraseña</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'carrito' %}"> Carrito </a>
-                
-                </li>Opciones
-                    <ul class="dropdown-menu"> <li><a class="dropdown-item" href="{% url 'categorias' %}">Categorias</a></li>
-                    </ul>
-                </li>
-                
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'logout' %}"> Salir </a>
-                </li>
-                {% else %}
-                <li class="nav-item">
-                    <a class="nav-link" href="">Registrarse </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'login' %}">Ingresar </a>
-                </li>
-                {% endif %}
-            </ul>
                 {% endif %}
             </ul>
         </div>
