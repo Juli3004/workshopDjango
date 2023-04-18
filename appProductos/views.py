@@ -2,6 +2,8 @@ import json
 from django.http import JsonResponse
 from django.shortcuts import render
 from .models import *
+from django.template.loader import render_to_string
+from django.core.mail import EmailMessage
 
 # Create your views here.
 def verCategorias(request):
@@ -141,3 +143,28 @@ def consultarCarro(request):
         'total': int(subtotal) * 1.19 + envio
     }
     return context
+
+def pagarCarrito(request):
+    context = consultarCarro(request)
+    regUsuario = request.user
+    nombreUsuario = str(regUsuario)
+    context['nombre'] = nombreUsuario
+    correo = regUsuario.email
+    #--- MODULO PARA ENVIO DE CORREO
+    mail_subject = 'Factura de compra'
+    
+    body = render_to_string('productos/html_email.html', context)
+    to_email = [correo] # Lista con el o los correos de destino 
+    
+    send_email = EmailMessage(mail_subject, body, to= to_email ) 
+    send_email.content_subtype = 'html'
+    send_email.send()
+    #---FIN MODULO PARA ENVIO DE CORREO DE CONFIRMACION
+    # sacar productos del carrito
+    listaCarrito = Carro.objects.filter(usuario= regUsuario, estado= 'activo')
+    for regCarro in listaCarrito:
+        regCarro.estado = 'comprado'
+        regCarro.save()
+    
+    #redireccionar
+    return verCategorias(request)
