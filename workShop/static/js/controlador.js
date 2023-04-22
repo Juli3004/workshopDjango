@@ -1,15 +1,7 @@
 /**
-  * Cambia la cantidad de un producto en el carrito 
-  * @param {int} id: PK del registro del produto en el carrito
-  * 
-  * Consulta AJAX al servidor por método POST 
-  * @param {*} urlserver :Direccion de envio 
-  * @param {*} datos :Data en formato JavaScript object 
-  * @param {*} callBackFunction : Funcion de retorno
-  * 
-  * @param {*} name Nombre de la cookie
-  * @returns el cvontenido de la cookie
-  */
+ * Cambia la cantidad de un producto en el carrito
+ * @param {int} id: PK del registro del produto en el carrito 
+ */
 
 function cambiarCantidad(id) {
     let cantidad = document.getElementById('cantidad_'+id).value;
@@ -33,6 +25,13 @@ function cambiarCantidadResp(data) {
     document.getElementById('total').innerText = '$' + data['total'];
 }
 
+//************ FUNCIONES AUXILIARES ************************************************************** */
+/**
+ * Consulta AJAX al servidor por método POST
+ * @param {*} urlserver :Direccion de envio
+ * @param {*} datos     :Data en formato JavaScript object
+ * @param {*} callBackFunction : Funcion de retorno
+ */
 function mensajeAjax(urlserver, datos, callBackFunction) {
     
     const csrftoken = getCookie('csrftoken');
@@ -46,15 +45,20 @@ function mensajeAjax(urlserver, datos, callBackFunction) {
         },
         body: JSON.stringify(datos) //JavaScript object of data to POST
     })
-    .then(response => response.json()) //Convierte la respuesta JSON en data
-    .then(data => { //mostrarAviso(data)
-        callBackFunction(data)
-    })
-    .catch((error) => {
-        console.error('Error:', JSON.stringify(error));
+        .then(response => response.json()) //Convierte la respuesta JSON en data
+        .then(data => { 
+            //mostrarAviso(data)
+            callBackFunction(data)
+        })
+        .catch((error) => {
+            console.error('Error:', JSON.stringify(error));
     });
 }
 
+/**
+ * @param {*} name Nombre de la cookie
+ * @returns el cvontenido de la cookie
+ */
 function getCookie(name) {
     let cookieValue = null;
     if (document.cookie && document.cookie !== '') {

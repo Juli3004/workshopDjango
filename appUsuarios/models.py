@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
-# Create your models here.
 
+# Create your models here.
 class MyAccountManager(BaseUserManager):
     def create_user(self, first_name, last_name, email, username, password= None):
         if not email:
@@ -16,6 +16,7 @@ class MyAccountManager(BaseUserManager):
             first_name = first_name,
             last_name = last_name,
         )
+
         user.set_password(password)
         user.save(using=self._db)
         return user
@@ -62,8 +63,10 @@ class Usuario(AbstractBaseUser):
 
     def __str__(self):
         return '{} {}'.format(self.first_name, self.last_name)
+    
     def has_perm(self, perm, obj=None):
         return self.is_admin
+    
     def has_module_perms(self, add_label):
         return True
     

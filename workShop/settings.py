@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'appProductos',
     'appUsuarios',
+    'widget_tweaks',
 ]
 
 MIDDLEWARE = [
@@ -71,7 +72,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'workShop.wsgi.application'
-
 AUTH_USER_MODEL = 'appUsuarios.Usuario'
 
 
@@ -129,15 +129,14 @@ STATICFILES_DIRS = [
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+#*************** EMAIL *************************************
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'smilenacruz@gmail.com'
+EMAIL_HOST_PASSWORD = 'igbrwfmddxdkhuyd'
+EMAIL_USE_TLS = True
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-# Email *************************************************
-
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_POST = 587
-EMAIL_HOST_USER = 'juldavidgpruebas@gmail.com'
-EMAIL_HOST_PASSWORD = 'gkpqvgzimtvdfliq'
-EMAIL_USE_TLS = True
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

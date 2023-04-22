@@ -7,7 +7,8 @@
         table {
             font-family: arial, sans-serif;
             border-collapse: collapse;
-            width: 80%; border: none;
+            width: 80%;
+            border: none;
             font-size: 14px;
             line-height: 1.5;
         }
@@ -18,14 +19,14 @@
             text-align: left;
             padding: 8px;
         }
-        
+
         tr:nth-child(even) {
             background-color: #cebebe;
         }
+
         #totales {
             width: 30%;
         }
-        
     </style>
 </head>
 
@@ -40,9 +41,9 @@
             <th>Producto</th>
             <th>Precio Unit.</th>
             <th>Total</th>
-        
+
         </tr>
-        
+
         {% for prod in carrito %}
         <tr>
             <td>{{prod.cantidad}}</td>

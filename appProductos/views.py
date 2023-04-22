@@ -1,7 +1,9 @@
-import json
-from django.http import JsonResponse
 from django.shortcuts import render
 from .models import *
+
+from django.http import JsonResponse
+import json
+
 from django.template.loader import render_to_string
 from django.core.mail import EmailMessage
 
@@ -11,6 +13,7 @@ def verCategorias(request):
     listaCateg = Categoria.objects.all()
     
     #ensamblar context
+    # Es el  conjunto de variables que envías a los  templates a través de las vistas
     context = {
         'categorias': listaCateg,
         'titulo': 'Categorias de Productos del Supermercado',
@@ -47,6 +50,26 @@ def verProducto(request, idProd, msj = None):
     #renderizar
     return render(request, 'productos/producto.html', context)
 
+def verTodos(request):
+    #consultar las categorias
+    listaCategorias = Categoria.objects.all().values('id', 'descripCategoria')
+    #consultar los productos
+    listaProductos = Producto.objects.all().values('id', 'nombre', 'categoria__id')
+    #armar el context
+    context = {
+        'titulo': 'Lista de categorias y productos',
+        'categorias': listaCategorias,
+        'productos': listaProductos,
+    }
+    
+    #renderizar
+    return render(request, 'productos/todos.html', context)
+
+
+"""
+    Funcion para agregar un producto al carro de compras
+    usa la PK del producto
+"""
 def agregarCarro(request, idProd):
     idProd = int(idProd)
     regUsuario = request.user
@@ -99,16 +122,21 @@ def cambiarCantidad(request):
             cantidad = int(data.get('cantidad'))
             if cantidad > 0:
                 #Lee el registro y lo modifica
-                regProducto = Carro.objects.get(id=id) 
+                regProducto = Carro.objects.get(id=id)
                 regProducto.cantidad = cantidad
                 regProducto.save()
             
             context = consultarCarro(request)
             return JsonResponse(context)
+        
         return JsonResponse({'alarma': 'no se pudo modificar...'}, status=400)
+    
     else:
         return verCarrito(request)
 
+"""
+    Función auxiliar
+"""
 def consultarCarro(request):
     #get usuario
     regUsuario = request.user
@@ -120,20 +148,22 @@ def consultarCarro(request):
     for prod in listaCarrito:
         reg = {
             'id': prod['id'],
-            'cantidad': prod['cantidad'],
-            'valUnit': prod['valUnit'],
-            'imgPeque': prod['producto__imgPeque'],
-            'nombre': prod['producto__nombre'],
-            'unidad': prod['producto__unidad'],
-            'total': prod['valUnit'] * prod['cantidad'],
-            'prodId': prod['producto__id'],
+            'cantidad':  prod['cantidad'],
+            'valUnit':  prod['valUnit'],
+            'imgPeque':  prod['producto__imgPeque'],
+            'nombre':  prod['producto__nombre'],
+            'unidad':   prod['producto__unidad'],
+            'total':   prod['valUnit'] * prod['cantidad'],
+            'prodId':   prod['producto__id'],
         }
         subtotal += prod['valUnit'] * prod['cantidad']
+
         listado.append(reg)
+    
     envio = 8000
     if len(listado) == 0:
         envio = 0
-    
+
     context = {
         'titulo': 'Productos en el carrito de compras',
         'carrito': listado,
@@ -142,6 +172,7 @@ def consultarCarro(request):
         'envio': envio,
         'total': int(subtotal) * 1.19 + envio
     }
+
     return context
 
 def pagarCarrito(request):
@@ -150,21 +181,23 @@ def pagarCarrito(request):
     nombreUsuario = str(regUsuario)
     context['nombre'] = nombreUsuario
     correo = regUsuario.email
-    #--- MODULO PARA ENVIO DE CORREO
+
+    #--- MODULO PARA ENVIO DE CORREO 
     mail_subject = 'Factura de compra'
-    
+
     body = render_to_string('productos/html_email.html', context)
-    to_email = [correo] # Lista con el o los correos de destino 
+    to_email = [correo]   #Lista con el o los correos de destino
     
-    send_email = EmailMessage(mail_subject, body, to= to_email ) 
+    send_email = EmailMessage(mail_subject, body, to= to_email )
     send_email.content_subtype = 'html'
     send_email.send()
     #---FIN MODULO PARA ENVIO DE CORREO DE CONFIRMACION
+
     # sacar productos del carrito
     listaCarrito = Carro.objects.filter(usuario= regUsuario, estado= 'activo')
     for regCarro in listaCarrito:
         regCarro.estado = 'comprado'
         regCarro.save()
-    
+
     #redireccionar
     return verCategorias(request)
